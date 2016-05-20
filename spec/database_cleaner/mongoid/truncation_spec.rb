@@ -42,7 +42,6 @@ module DatabaseCleaner
         create_gadget
         ensure_counts(MongoTest::Widget => 1, MongoTest::Gadget => 1)
         truncation.clean
-        require 'byebug'; byebug
         ensure_counts(MongoTest::Widget => 0, MongoTest::Gadget => 0)
       end
 
