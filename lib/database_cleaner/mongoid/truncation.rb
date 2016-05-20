@@ -22,7 +22,6 @@ module DatabaseCleaner
         end
 
       elsif ::Mongoid::VERSION < '5'
-
         include ::DatabaseCleaner::Moped::TruncationBase
 
         private
@@ -40,9 +39,7 @@ module DatabaseCleaner
         end
 
       else
-
         include ::DatabaseCleaner::Mongo2::TruncationMixin
-
       end
     end
   end
