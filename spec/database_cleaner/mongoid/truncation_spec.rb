@@ -1,15 +1,16 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-require 'mongo'
-require 'database_cleaner/mongo/truncation'
+require 'mongoid'
+require 'database_cleaner/mongoid/truncation'
 require File.dirname(__FILE__) + '/mongo_examples'
 
 module DatabaseCleaner
-  module Mongo
-
+  module Mongoid
     describe Truncation do
-      let(:args) {{}}
-      let(:truncation) { described_class.new(args).tap { |t| t.db=@db } }
-      #doing this in the file root breaks autospec, doing it before(:all) just fails the specs
+      let(:args) { Hash.new }
+      let(:truncation) { described_class.new(args).tap { |t| t.db = @db } }
+
+      # doing this in the file root breaks autospec, doing it before(:all) just
+      # fails the specs
       before(:all) do
         @connection = ::Mongo::Connection.new('127.0.0.1')
         @test_db = 'database_cleaner_specs'
@@ -21,8 +22,8 @@ module DatabaseCleaner
       end
 
       def ensure_counts(expected_counts)
-        # I had to add this sanity_check garbage because I was getting non-determinisc results from mongo at times..
-        # very odd and disconcerting...
+        # I had to add this sanity_check garbage because I was getting
+        # non-determinisc results from mongo at times.
         expected_counts.each do |model_class, expected_count|
           model_class.count.should equal(expected_count), "#{model_class} expected to have a count of #{expected_count} but was #{model_class.count}"
         end
@@ -41,6 +42,7 @@ module DatabaseCleaner
         create_gadget
         ensure_counts(MongoTest::Widget => 1, MongoTest::Gadget => 1)
         truncation.clean
+        require 'byebug'; byebug
         ensure_counts(MongoTest::Widget => 0, MongoTest::Gadget => 0)
       end
 
